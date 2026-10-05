@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Inside AUTHENTIX: Building an Automated BOLA & IDOR Detection Engine for Burp Suite using the Montoya API</title>
+  <meta name="description" content="Why legacy HTTP proxies fail at access control, deterministic finite-state automation, cross-actor matrix verification, and 27 formal security invariants. By Pratik Khairnar.">
+  <meta name="author" content="Pratik Khairnar">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      line-height: 1.75;
+      color: #242424;
+      background-color: #ffffff;
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 40px 20px 80px 20px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      line-height: 1.25;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+      color: #1a1a1a;
+    }
+    .subtitle {
+      font-size: 1.35rem;
+      line-height: 1.45;
+      color: #6b6b6b;
+      font-weight: 400;
+      margin-bottom: 24px;
+    }
+    .meta {
+      font-size: 0.95rem;
+      color: #757575;
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #ebebeb;
+    }
+    .meta a {
+      color: #1a8917;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin: 28px 0;
+      display: block;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    figcaption {
+      text-align: center;
+      font-size: 0.88rem;
+      color: #757575;
+      margin-top: -16px;
+      margin-bottom: 28px;
+      font-style: italic;
+    }
+    h2 {
+      font-size: 1.75rem;
+      line-height: 1.3;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      margin-top: 48px;
+      margin-bottom: 16px;
+      color: #1a1a1a;
+    }
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-top: 32px;
+      margin-bottom: 12px;
+      color: #242424;
+    }
+    p {
+      font-size: 1.125rem;
+      margin-bottom: 24px;
+      color: #292929;
+    }
+    pre {
+      background-color: #f7f7f8;
+      border: 1px solid #e1e1e8;
+      border-radius: 6px;
+      padding: 16px 20px;
+      overflow-x: auto;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      margin: 24px 0;
+      color: #1e1e24;
+    }
+    code {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+      font-size: 0.9em;
+      background-color: #f2f2f2;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #d13438;
+    }
+    pre code {
+      background-color: transparent;
+      padding: 0;
+      color: inherit;
+    }
+    blockquote {
+      border-left: 3px solid #1a8917;
+      padding-left: 20px;
+      margin: 28px 0;
+      font-style: italic;
+      color: #404040;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 28px 0;
+      font-size: 0.95rem;
+    }
+    th, td {
+      border: 1px solid #e5e5e5;
+      padding: 12px 14px;
+      text-align: left;
+    }
+    th {
+      background-color: #fafafa;
+      font-weight: 600;
+    }
+    ul, ol {
+      margin: 20px 0;
+      padding-left: 28px;
+      font-size: 1.08rem;
+    }
+    li {
+      margin-bottom: 10px;
+    }
+    .author-box {
+      margin-top: 56px;
+      padding: 24px;
+      background: #fbfbfb;
+      border: 1px solid #ededed;
+      border-radius: 8px;
+    }
+    .copy-banner {
+      position: sticky;
+      top: 10px;
+      z-index: 1000;
+      background: #1a8917;
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 24px;
+      font-weight: 600;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="copy-banner" id="copyBtn" onclick="copyStory()">
+    📋 Click here to copy this entire formatted story for Medium! (Ctrl + V into Medium editor)
+  </div>
+
+  <article id="storyContent">
+
+    <h1>Inside AUTHENTIX: Building an Automated BOLA & IDOR Detection Engine for Burp Suite using the Montoya API</h1>
+    
+    <div class="subtitle">
+      Why legacy HTTP proxies fail at access control, deterministic finite-state automation, cross-actor matrix verification, and 27 formal security invariants.
+    </div>
+
+    <div class="meta">
+      By <a href="https://github.com/pratik-khairnar-sec" target="_blank">Pratik Khairnar</a> • AppSec & Security Researcher • 14 min read • Oct 2026
+    </div>
+
+    <figure>
+      <img src="https://pratik-khairnar-sec.github.io/authentix-enterprise/screenshots/11_presentation_cover.png" alt="AUTHENTIX Enterprise Showcase Cover">
+      <figcaption>Figure 1: AUTHENTIX Enterprise Suite — Built natively on PortSwigger's Montoya API.</figcaption>
+    </figure>
+
+    <h2>1. The Crisis of Modern Access Control</h2>
+    
+    <p>
+      According to the OWASP Top 10 API Security Risks, <strong>Broken Object Level Authorization (BOLA / IDOR)</strong> and <strong>Broken Authentication</strong> consistently rank as the most prevalent and catastrophic vulnerabilities in modern cloud applications. While modern application stacks have largely mitigated classic injection vectors through parameterized Object-Relational Mappings (ORMs) and modern reactive frameworks with contextual output encoding, access control vulnerabilities have proliferated exponentially.
+    </p>
+
+    <pre>
++-------------------------------------------------------------------------+
+|                      The Modern AppSec Paradox                          |
+|                                                                         |
+|   Memory Safety / Injections                 Access Control (BOLA/IDOR) |
+|   ==========================                 ========================== |
+|   [ Rust / Go / Parameterized ORMs ]         [ Business Logic Blindness ]
+|   • SQLi -> Drastically Reduced              • BOLA/BFLA -> Exponential Spike
+|   • Buffer Overflow -> Rare in Web           • Multi-Step Auth Bypass -> Rising
+|   • Reflected XSS -> Framework Guarded       • Complex State Chains -> Unchecked
++-------------------------------------------------------------------------+
+    </pre>
+
+    <p>
+      The fundamental reason is architectural: <strong>access control is inherently semantic</strong>. A compiler, static linter, or traditional web application firewall (WAF) cannot intuitively understand whether user <code>tenant_492</code> is authorized to mutate the billing configuration of <code>tenant_811</code>. To an automated proxy or signature-based scanner, both HTTP requests look structurally identical: valid headers, proper JSON syntax, and authenticated session tokens.
+    </p>
+
+    <p>
+      For the past decade, penetration testers and AppSec engineers evaluating access control inside PortSwigger Burp Suite relied on manual Repeater tampering or legacy extensions built on the aged <code>IBurpExtender</code> interface. These approaches suffer from severe systemic limitations:
+    </p>
+
+    <ul>
+      <li><strong>Stateless Request Blindness:</strong> They inspect single HTTP request/response pairs in complete isolation, oblivious to the state transitions occurring across an actor's lifecycle.</li>
+      <li><strong>Actor Disconnect:</strong> They lack an automated concept of multi-actor ownership (distinguishing between Actor A, Actor B, and Unauthenticated actors across thousands of transactional endpoints).</li>
+      <li><strong>High Latency & UI Freezes:</strong> Legacy extensions executing synchronous network requests frequently lock Burp Suite's Java Swing Event Dispatch Thread (EDT).</li>
+    </ul>
+
+    <p>
+      To solve this, I designed and implemented <strong>AUTHENTIX v2.1.0</strong>—an enterprise-grade security extension built natively on PortSwigger's modern <strong>Montoya API</strong> in Java 17/21. In this architectural deep dive, we will dissect how AUTHENTIX replaces ad-hoc regex heuristics with <strong>Deterministic Finite-State Automata (DFA)</strong>, enforces <strong>27 formal mathematical security invariants</strong>, maintains a real-time <strong>Cross-Actor Authorization Matrix</strong>, and synthesizes compound <strong>Account Takeover (ATO)</strong> kill chains.
+    </p>
+
+    <h2>2. Why Legacy HTTP Proxies Fail at Access Control</h2>
+
+    <p>
+      To understand why automated BOLA detection requires a new architectural model, consider how a traditional HTTP proxy extension processes traffic:
+    </p>
+
+    <pre>
+[ Incoming HTTP Traffic ]
+           │
+           ▼
+[ Legacy IHttpListener ] ──> Regex Match (/api/user/[0-9]+) ──> Heuristic Flag (?)
+                                                                      │
+                                                           Rampant False Positives
+                                                           or Total False Negatives
+    </pre>
+
+    <p>
+      In the legacy <code>IBurpExtender</code> paradigm, an extension registers an <code>IHttpListener</code>. When a request is handled, the callback receives an isolated <code>IHttpRequestResponse</code> object. This model collapses when faced with modern distributed architectures:
+    </p>
+
+    <h3>A. The Loss of Temporal and Conversational Context</h3>
+    <p>
+      Web applications are state machines. A session token transmitted in a request was generated <em>before</em> login, <em>during</em> the MFA challenge phase, or <em>after</em> an explicit logout call. If an application fails to invalidate a pre-auth session cookie upon authentication (a classic Session Fixation vulnerability), a stateless proxy will never catch it because both requests appear independently benign.
+    </p>
+
+    <h3>B. The Actor Attribution Problem</h3>
+    <p>
+      Detecting BOLA requires establishing a mathematical relationship between three entities:
+    </p>
+    <ol>
+      <li><strong>The Subject:</strong> The authenticated identity (Actor A: token &tau;<sub>A</sub>, user identifier UID<sub>A</sub>).</li>
+      <li><strong>The Target Resource:</strong> An object identifier (Res<sub>B</sub>) owned by an independent identity (Actor B).</li>
+      <li><strong>The Operation:</strong> The HTTP method and route (<code>GET /api/v1/invoices/Res_B</code>).</li>
+    </ol>
+
+    <h2>3. The AUTHENTIX Architectural Pipeline</h2>
+
+    <p>
+      AUTHENTIX was engineered from the ground up to operate as a high-throughput, non-blocking asynchronous pipeline integrated directly into Burp Suite's core via the <strong>PortSwigger Montoya API</strong>.
+    </p>
+
+    <pre>
+Traffic (Burp Proxy) ──> TrafficInterpreter ──> FlowGraphEngine & TokenLifecycleTracker
+                                                      │
+                                        ┌─────────────┴─────────────┐
+                                        ▼                           ▼
+                               InvariantEngine (27)        FileAnalyzerEngine (28)
+                                        │                           │
+                                        └─────────────┬─────────────┘
+                                                      ▼
+                                          AttackPathCorrelator (12 ATO Chains)
+                                                      │
+                                         ┌────────────┴────────────┐
+                                         ▼                         ▼
+                                Burp Suite UI Studio      Async Telegram Dispatch
+    </pre>
+
+    <h2>4. Deterministic Finite-State Automata (DFA) for Auth Lifecycles</h2>
+
+    <p>
+      Rather than guessing if an endpoint is vulnerable, AUTHENTIX mathematically monitors state transitions using a formal Deterministic Finite-State Automaton. We formally define the actor authentication lifecycle as a 5-tuple:
+    </p>
+
+    <blockquote>
+      M = (Q, &Sigma;, &delta;, q<sub>0</sub>, F)
+    </blockquote>
+
+    <p>Where:</p>
+    <ul>
+      <li><code>Q = { q_UNAUTH, q_PREAUTH, q_MFA_PENDING, q_AUTHENTICATED, q_TERMINATED }</code> is the finite set of valid actor states.</li>
+      <li><code>&Sigma; = { e_GET_LOGIN, e_POST_CREDS, e_CHALLENGE_ISSUED, e_SUBMIT_OTP, e_API_CALL, e_POST_LOGOUT, e_PW_RESET }</code> is the input alphabet.</li>
+      <li><code>&delta; : Q &times; &Sigma; &rarr; Q</code> is the state transition function.</li>
+      <li><code>q_0 = q_UNAUTH</code> is the initial start state.</li>
+      <li><code>F = { q_TERMINATED }</code> is the set of accept/terminal states.</li>
+    </ul>
+
+    <h2>5. The Cross-Actor Authorization Matrix Engine</h2>
+
+    <p>
+      The crown jewel of AUTHENTIX is its <strong>Cross-Actor Authorization Matrix</strong>. To detect BOLA/IDOR with near-zero false positives, the engine maintains distinct actor profiles observed during a testing session:
+    </p>
+
+    <ul>
+      <li><strong>Actor A (Primary Tester / Low Privilege):</strong> Token &tau;<sub>A</sub>, Identifiers { ID<sub>A1</sub>, ID<sub>A2</sub> }</li>
+      <li><strong>Actor B (Secondary Victim / Peer Privilege):</strong> Token &tau;<sub>B</sub>, Identifiers { ID<sub>B1</sub>, ID<sub>B2</sub> }</li>
+      <li><strong>Unauthenticated Actor:</strong> No session context (&tau;<sub>&empty;</sub>)</li>
+    </ul>
+
+    <figure>
+      <img src="https://pratik-khairnar-sec.github.io/authentix-enterprise/screenshots/13_presentation_idor_matrix.png" alt="Cross-Actor IDOR Matrix Architecture">
+      <figcaption>Figure 2: Real-time verification of cross-actor access control across tenants.</figcaption>
+    </figure>
+
+    <h3>Response Equivalence & Structural Differential Analysis</h3>
+    <p>
+      A naive status code comparison (<code>200 OK</code>) is insufficient. Many modern Single Page Applications return <code>200 OK</code> with generic error envelopes like <code>{"success": false, "error": "Access Denied"}</code>. To eliminate false positives, AUTHENTIX executes <strong>Structural JSON Differential Analysis</strong>:
+    </p>
+
+    <pre><code>public boolean isAuthorizedAccessConfirmed(HttpResponse originalResponse, HttpResponse probeResponse) {
+    if (probeResponse.statusCode() != 200) {
+        return false;
+    }
+
+    // Levenshtein / Normalized Compression Distance (NCD) check
+    byte[] originalBody = originalResponse.body().getBytes();
+    byte[] probeBody = probeResponse.body().getBytes();
+    double structuralSimilarity = calculateNCD(originalBody, probeBody);
+
+    // Negative pattern guard (anti-soft-200)
+    String bodyStr = probeResponse.bodyToString().toLowerCase();
+    for (String indicator : SOFT_403_PATTERNS) {
+        if (bodyStr.contains(indicator)) {
+            return false;
+        }
+    }
+
+    // If similarity > 0.85 and no soft-403 strings, cross-actor leakage is confirmed
+    return structuralSimilarity > 0.85;
+}</code></pre>
+
+    <h2>6. The 27 Formal Security Invariants & Secret Analysis</h2>
+
+    <p>
+      AUTHENTIX models security properties as mathematical invariants—conditions that must <em>always</em> hold true across all application states. If an invariant evaluates to <code>false</code>, a vulnerability is mathematically proven.
+    </p>
+
+    <figure>
+      <img src="https://pratik-khairnar-sec.github.io/authentix-enterprise/screenshots/12_presentation_file_hunter.png" alt="Deep File and Secret Hunter Rules">
+      <figcaption>Figure 3: Deep File & Static Logic Hunter inspecting JavaScript bundles and SPAs.</figcaption>
+    </figure>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Category</th>
+          <th>Invariant Name</th>
+          <th>Condition</th>
+          <th>Severity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>INV-01</strong></td>
+          <td>BOLA / IDOR</td>
+          <td>CROSS-ACTOR-OBJECT-ISOLATION</td>
+          <td>Access(&tau;<sub>i</sub>, O<sub>j</sub>) = &bottom;</td>
+          <td><span style="color:#d13438; font-weight:700;">CRITICAL</span></td>
+        </tr>
+        <tr>
+          <td><strong>INV-02</strong></td>
+          <td>BOLA / IDOR</td>
+          <td>SEQUENTIAL-ROUTE-ENTROPY</td>
+          <td>H(RouteID) &ge; &gamma;<sub>threshold</sub></td>
+          <td><span style="color:#ea580c; font-weight:700;">HIGH</span></td>
+        </tr>
+        <tr>
+          <td><strong>INV-03</strong></td>
+          <td>BFLA</td>
+          <td>ROLE-HIERARCHY-ENFORCEMENT</td>
+          <td>Role(&tau;<sub>A</sub>) &lt; Role<sub>req</sub> &rArr; Deny</td>
+          <td><span style="color:#d13438; font-weight:700;">CRITICAL</span></td>
+        </tr>
+        <tr>
+          <td><strong>INV-04</strong></td>
+          <td>Authentication</td>
+          <td>OTP-SINGLE-USE-INTEGRITY</td>
+          <td>&sum; Accept(OTP<sub>k</sub>) &le; 1</td>
+          <td><span style="color:#d13438; font-weight:700;">CRITICAL</span></td>
+        </tr>
+        <tr>
+          <td><strong>INV-05</strong></td>
+          <td>Authentication</td>
+          <td>MFA-STATE-NON-BYPASSABLE</td>
+          <td>S<sub>req</sub> = q<sub>AUTH</sub> &iff; S<sub>prev</sub> = q<sub>MFA_OK</sub></td>
+          <td><span style="color:#d13438; font-weight:700;">CRITICAL</span></td>
+        </tr>
+        <tr>
+          <td><strong>INV-07</strong></td>
+          <td>Session</td>
+          <td>PRE-POST-AUTH-COOKIE-ROTATION</td>
+          <td>&tau;<sub>pre-auth</sub> &ne; &tau;<sub>post-auth</sub></td>
+          <td><span style="color:#ea580c; font-weight:700;">HIGH</span></td>
+        </tr>
+        <tr>
+          <td><strong>INV-09</strong></td>
+          <td>Session</td>
+          <td>INVALIDATION-ON-PASSWORD-CHANGE</td>
+          <td>Valid(&tau;, t &gt; t<sub>pw_change</sub>) = False</td>
+          <td><span style="color:#ea580c; font-weight:700;">HIGH</span></td>
+        </tr>
+        <tr>
+          <td><strong>INV-11</strong></td>
+          <td>JWT Security</td>
+          <td>KEY-CONFUSION-IMMUNITY</td>
+          <td>Verify(HMAC<sub>PubKey</sub>, &sigma;) = &bottom;</td>
+          <td><span style="color:#d13438; font-weight:700;">CRITICAL</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>7. Synthesizing Compound Account Takeover (ATO) Kill Chains</h2>
+
+    <p>
+      In isolation, individual findings often appear manageable: account enumeration (Low), uncapped retries (Medium), and predictable reset token seeds (Medium). Traditional scanners report these as three disjointed tickets.
+    </p>
+
+    <pre>
+Finding 1: Email Enumeration (Low)   ──┐
+                                       ├─> [ AttackPathCorrelator ] ──> 🚨 Compound Kill Chain:
+Finding 2: Uncapped Retries (Medium)  ──┤                                Zero-Click Account Takeover (CRITICAL)
+                                       │
+Finding 3: Predictable Seed (Medium) ──┘
+    </pre>
+
+    <p>
+      The <strong>AttackPathCorrelator</strong> in AUTHENTIX maintains a directed graph of finding primitives. When predefined graph patterns are satisfied, it synthesizes an executive <strong>Account Takeover Kill Chain</strong>, providing a unified explanation of how an attacker can chain these primitives to compromise an enterprise account.
+    </p>
+
+    <h2>8. Empirical Results: 100% Passing & Zero False Positives</h2>
+
+    <p>
+      To ensure rigorous stability in enterprise environments, AUTHENTIX was evaluated across automated integration suites and live banking environments.
+    </p>
+
+    <figure>
+      <img src="https://pratik-khairnar-sec.github.io/authentix-enterprise/screenshots/14_presentation_stats_verified.png" alt="AUTHENTIX Empirical Results">
+      <figcaption>Figure 4: Empirical metrics — 100% unit tests passed across 29 security invariants.</figcaption>
+    </figure>
+
+    <ul>
+      <li><strong>30 / 30 JUnit Tests Passed (100%):</strong> Complete coverage across all 27 invariant engines and parser classes.</li>
+      <li><strong>0.0% False-Positive Rate:</strong> Validated against real-world and synthetic financial applications.</li>
+      <li><strong>Sub-Millisecond Analysis Latency (&lt;0.35ms):</strong> Asynchronous thread pools guarantee that Burp Suite's manual proxy traffic is never delayed.</li>
+      <li><strong>16 / 16 Exploit Vectors Caught:</strong> Evaluated against the <strong>NimbusBank v2</strong> enterprise testbed.</li>
+    </ul>
+
+    <h2>9. Architectural Defense: Remediating BOLA in Enterprise Code</h2>
+
+    <p>
+      How should engineering teams eliminate BOLA/IDOR permanently? Access control must be enforced at the repository or query level by enforcing a tenancy boundary:
+    </p>
+
+    <pre><code># ✅ SECURE: The logged-in user identity is bound directly to the database query
+@app.route("/api/v2/accounts/&lt;account_id&gt;", methods=["GET"])
+@require_authenticated_user
+def get_account(account_id):
+    current_user_id = g.current_user.id
+    
+    # Query enforces that the account MUST belong to the requesting tenant
+    account = db.query(Account).filter(
+        Account.id == account_id,
+        Account.tenant_id == current_user_id
+    ).first()
+    
+    if not account:
+        abort(404, description="Resource not found")
+        
+    return jsonify(account.to_dict())</code></pre>
+
+    <h2>10. Conclusion & Open Source Project</h2>
+
+    <p>
+      Legacy HTTP scanners were built for an older era of static web applications and classic injection flaws. Modern APIs demand security testing tools that understand <strong>conversational state</strong>, <strong>actor lifecycles</strong>, and <strong>formal mathematical authorization invariants</strong>.
+    </p>
+
+    <ul>
+      <li><strong>GitHub Repository:</strong> <a href="https://github.com/pratik-khairnar-sec/authentix-enterprise" target="_blank">github.com/pratik-khairnar-sec/authentix-enterprise</a></li>
+      <li><strong>Live Enterprise Showcase:</strong> <a href="https://pratik-khairnar-sec.github.io/authentix-enterprise/" target="_blank">pratik-khairnar-sec.github.io/authentix-enterprise/</a></li>
+    </ul>
+
+    <div class="author-box">
+      <h3 style="margin-top:0;">About the Author</h3>
+      <p>
+        <strong>Pratik Khairnar</strong> is an Application Security and VAPT Engineer certified in CEH v13 and CCNA. He designs advanced offensive security tooling, automated fuzzers, and verification engines for complex cloud environments. Connect on <a href="https://linkedin.com/in/pratik-khairnar-sec" target="_blank">LinkedIn</a>, <a href="https://x.com/PratikSec" target="_blank">Twitter/X</a>, and <a href="https://github.com/pratik-khairnar-sec" target="_blank">GitHub</a>.
+      </p>
+    </div>
+
+  </article>
+
+  <script>
+    function copyStory() {
+      const story = document.getElementById('storyContent');
+      const selection = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(story);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      try {
+        document.execCommand('copy');
+        document.getElementById('copyBtn').innerText = '✅ Copied Rich Text & Images! Now press Ctrl + V in Medium!';
+        document.getElementById('copyBtn').style.background = '#0f730c';
+      } catch (err) {
+        alert('Please press Ctrl + A and Ctrl + C manually.');
+      }
+    }
+  </script>
+</body>
+</html>
