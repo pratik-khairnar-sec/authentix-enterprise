@@ -48,6 +48,15 @@ Explore the interactive security demonstration, 27 Invariants simulation, 28 sec
 
 ---
 
+## 📂 Documentation & Engineering Artifacts
+
+- 📑 **[Formal Project Report (PDF)](docs/reports/AUTHENTIX_Project_Report.pdf)**: Comprehensive 20+ page engineering specification covering architecture, threat models, finite-state machine proofs, and verification logs.
+- 🎓 **[Formal Research Paper (PDF)](docs/reports/AUTHENTIX_Research_Paper.pdf)**: Academic-grade research paper: *"Deterministic Finite-State Invariant Verification for Multi-Step Authentication & IDOR Vulnerabilities in Web APIs"*.
+- 📊 **[Executive Presentation Slides (PDF)](docs/reports/AUTHENTIX-Presentation-Slides.pdf)**: Print-ready 11-slide presentation summarizing executive findings, NimbusBank test lab results, and enterprise deployment options.
+- 📄 **[Author ATS Resume (PDF)](docs/reports/Pratik_Khairnar_Resume_ATS.pdf)**: Professional single-page security engineer resume of Pratik Khairnar.
+
+---
+
 ## 👤 Author & Architecture Inquiries
 
 **Pratik Khairnar**
