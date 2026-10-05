@@ -597,55 +597,6 @@
       line-height: 1.5;
     }
 
-    /* Report & Downloads Center */
-    .downloads-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-
-    .download-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-xl);
-      padding: 28px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      transition: var(--transition);
-    }
-    .download-card:hover {
-      border-color: var(--accent-gold);
-      transform: translateY(-4px);
-      box-shadow: 0 12px 30px rgba(0,0,0,0.5);
-    }
-
-    .download-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: var(--radius-md);
-      background: rgba(200, 169, 110, 0.12);
-      border: 1px solid rgba(200, 169, 110, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-      color: var(--accent-gold);
-    }
-
-    .download-title {
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: #fff;
-      margin-bottom: 8px;
-    }
-
-    .download-desc {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-      margin-bottom: 24px;
-    }
 
     /* Executive Footer */
     .footer {
@@ -662,7 +613,6 @@
       .hero-title { font-size: 2.5rem; }
       .stats-grid { grid-template-columns: repeat(3, 1fr); }
       .lab-grid { grid-template-columns: 1fr; }
-      .downloads-grid { grid-template-columns: 1fr; }
       .slide-grid { grid-template-columns: 1fr; }
     }
   </style>
@@ -686,7 +636,7 @@
         <a href="#presentation" class="nav-link">Slide Deck</a>
         <a href="#invariants" class="nav-link">27 Invariants</a>
         <a href="#secrets" class="nav-link">28 Secret Rules</a>
-        <a href="#reports" class="nav-link">Documentation Hub</a>
+        <a href="#author" class="nav-link">Contact</a>
         <a href="https://github.com/pratik-khairnar-sec" target="_blank" class="btn btn-gold">
           Author Profile
         </a>
@@ -715,9 +665,9 @@
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           View 11-Slide Executive Deck
         </a>
-        <a href="#reports" class="btn btn-secondary btn-lg">
-          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-          Download Reports (PDF)
+        <a href="#author" class="btn btn-secondary btn-lg">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Contact Author
         </a>
       </div>
 
@@ -1066,58 +1016,8 @@ Account Enumeration (Inv 26) + Weak Reset Token (Inv 16) + Reset Token Reusable 
     </div>
   </section>
 
-  <!-- Documentation & PDF Hub -->
-  <section id="reports" class="container section-wrap">
-    <div class="section-head">
-      <span class="section-tag">Executive Artifacts</span>
-      <h2 class="section-title">Documentation &amp; Reports Center</h2>
-      <p class="section-desc">Download comprehensive project documentation, formal research papers, and slide decks.</p>
-    </div>
-
-    <div class="downloads-grid">
-      <div class="download-card">
-        <div>
-          <div class="download-icon">
-            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-          </div>
-          <h3 class="download-title">Formal Project Report</h3>
-          <p class="download-desc">Comprehensive 20+ page engineering specification covering architecture, threat models, finite-state machine proofs, and verification logs.</p>
-        </div>
-        <a href="reports/AUTHENTIX_Project_Report.pdf" target="_blank" class="btn btn-gold" download>
-          Download Report (PDF)
-        </a>
-      </div>
-
-      <div class="download-card">
-        <div>
-          <div class="download-icon">
-            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-          </div>
-          <h3 class="download-title">Formal Research Paper</h3>
-          <p class="download-desc">Academic-grade research paper: "Deterministic Finite-State Invariant Verification for Multi-Step Authentication &amp; IDOR Vulnerabilities in Web APIs".</p>
-        </div>
-        <a href="reports/AUTHENTIX_Research_Paper.pdf" target="_blank" class="btn btn-gold" download>
-          Download Paper (PDF)
-        </a>
-      </div>
-
-      <div class="download-card">
-        <div>
-          <div class="download-icon">
-            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          </div>
-          <h3 class="download-title">Executive Slide Deck</h3>
-          <p class="download-desc">Print-ready 11-slide presentation summarizing executive findings, NimbusBank test lab results, and enterprise deployment options.</p>
-        </div>
-        <a href="reports/AUTHENTIX-Presentation-Slides.pdf" target="_blank" class="btn btn-gold" download>
-          Download Slides (PDF)
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Author Spotlight -->
-  <section class="container section-wrap">
+  <!-- Author Spotlight & Contact -->
+  <section id="author" class="container section-wrap">
     <div style="background: linear-gradient(135deg, var(--bg-card), var(--bg-surface)); border: 1px solid var(--border-glow); border-radius: var(--radius-xl); padding: 36px; display: flex; align-items: center; gap: 30px;">
       <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-gold), var(--accent-cyan)); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.8rem; color: #040711; flex-shrink: 0;">
         PK
@@ -1125,14 +1025,20 @@ Account Enumeration (Inv 26) + Weak Reset Token (Inv 16) + Reset Token Reusable 
       <div>
         <h3 style="font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 4px;">Pratik Khairnar</h3>
         <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-gold); margin-bottom: 10px;">
-          Cyber Security Researcher &amp; Security Tool Developer • Creator of AUTHENTIX, ReconArsenal, Reflectra &amp; BlindStrike
+          VAPT Engineer • Penetration Tester • Creator of AUTHENTIX, ReconArsenal, Reflectra &amp; BlindStrike
         </div>
-        <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px;">
-          Architect of high-velocity AppSec and defensive vulnerability verification tools. Experienced in Burp Suite extension engineering, black-box VAPT, IDOR discovery, and zero-false-positive automated testing.
+        <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 18px;">
+          Security researcher and tool developer focused on web application penetration testing (VAPT), Burp Suite Montoya API extension engineering, and defensive vulnerability verification. Available for entry-level and junior penetration testing opportunities.
         </p>
-        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-          <a href="https://github.com/pratik-khairnar-sec" target="_blank" class="btn btn-secondary btn-sm">GitHub Profile</a>
-          <a href="reports/Pratik_Khairnar_Resume.pdf" target="_blank" class="btn btn-gold btn-sm" download>Download Official Resume (PDF)</a>
+        <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+          <a href="mailto:pratik.khairnar.sec@gmail.com" class="btn btn-gold btn-sm">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="margin-right:6px;vertical-align:middle;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Email: pratik.khairnar.sec@gmail.com
+          </a>
+          <a href="https://github.com/pratik-khairnar-sec" target="_blank" class="btn btn-secondary btn-sm">
+            <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24" style="margin-right:6px;vertical-align:middle;"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            GitHub Profile
+          </a>
         </div>
       </div>
     </div>
