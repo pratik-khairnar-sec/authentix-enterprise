@@ -7,6 +7,9 @@
 [![Montoya API](https://img.shields.io/badge/Burp%20Suite-Montoya%20API-FF6633?style=for-the-badge&logo=portswigger)](https://portswigger.net/burp)
 [![Java](https://img.shields.io/badge/Java-17%20%7C%2021-ED8B00?style=for-the-badge&logo=openjdk)](https://openjdk.org/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+[![Medium Writeup](https://img.shields.io/badge/Medium-Deep_Dive_Writeup-black.svg?style=for-the-badge&logo=medium)](https://pratik-khairnar-sec.medium.com/)
+[![X Thread](https://img.shields.io/badge/X-Official_Thread-000000.svg?style=for-the-badge&logo=x)](https://x.com/PratikSec/status/2108584870293451190)
+[![Portfolio Sandbox](https://img.shields.io/badge/Live_Sandbox-Portfolio_Demo-38bdf8.svg?style=for-the-badge&logo=shield)](https://pratik-khairnar-sec.github.io/portfolio/)
 
 ---
 
