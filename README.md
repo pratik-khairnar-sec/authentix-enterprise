@@ -1,10 +1,10 @@
-# 🛡️ AUTHENTIX v2.1.0 Enterprise Showcase
+# 🛡️ AUTHENTIX v3.0.0 Enterprise Demonstration Portal
 
-**Next-Generation Authentication, IDOR/BOLA & Secret Scanner Security Suite for Burp Suite**
+**Autonomous Authentication, IDOR/BOLA & Multi-Tenant Authorization Intelligence Engine for Burp Suite**
 
 [![Enterprise Portal](https://img.shields.io/badge/Enterprise%20Portal-Live%20Showcase-c8a96e?style=for-the-badge&logo=shield)](https://pratik-khairnar-sec.github.io/authentix-enterprise/)
 [![Author](https://img.shields.io/badge/Author-Pratik%20Khairnar-38bdf8?style=for-the-badge&logo=github)](https://github.com/pratik-khairnar-sec)
-[![Montoya API](https://img.shields.io/badge/Burp%20Suite-Montoya%20API-FF6633?style=for-the-badge&logo=portswigger)](https://portswigger.net/burp)
+[![Montoya API](https://img.shields.io/badge/Burp%20Suite-Montoya%20API%202026.7-FF6633?style=for-the-badge&logo=portswigger)](https://portswigger.net/burp)
 [![Java](https://img.shields.io/badge/Java-17%20%7C%2021-ED8B00?style=for-the-badge&logo=openjdk)](https://openjdk.org/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 [![Medium Writeup](https://img.shields.io/badge/Medium-Deep_Dive_Writeup-black.svg?style=for-the-badge&logo=medium)](https://pratik-khairnar-sec.medium.com/)
@@ -21,13 +21,15 @@
 
 ## 📌 Executive Summary
 
-**AUTHENTIX v2.1.0** is an enterprise-grade security extension for PortSwigger Burp Suite (built natively on the **PortSwigger Montoya API**) engineered to address the critical gaps in modern Application Security testing:
-- **Broken Object Level Authorization (BOLA / IDOR)**
-- **Multi-Step Authentication & MFA Lifecycle Flaws**
-- **Compound Account Takeover (ATO) Attack Chains**
-- **Deep Client-Side JavaScript & HTTP Secret Scanning**
+**AUTHENTIX v3.0.0** is an enterprise-grade security extension for PortSwigger Burp Suite (built natively on the **PortSwigger Montoya API 2026.7**) engineered to eliminate critical identity blindspots in modern web applications and distributed APIs:
+- **3-Way Differential Cross-Actor IDOR / BOLA Engine** (Victim vs Attacker vs Anonymous)
+- **Soft-200 Application Error Disambiguation** (100% Zero False Positives)
+- **Multi-Tenant Context Isolation & Header Swapping Testing**
+- **Reverse Proxy Path Normalization & Gateway Bypass** (Spring `..;/`, URL-encoded slashes, rewrite headers)
+- **Compound Multi-Step Account Takeover (ATO) Attack Chains**
+- **Deep Client-Side JavaScript & HTTP Secret Scanning** (30+ High-Entropy RegEx Signatures)
 
-It continuously models actor lifecycle states as a deterministic finite-state automaton, validates **27 formal mathematical security invariants**, runs **28 deep secret analysis rules**, maintains an automated **Cross-Actor Authorization Matrix**, and broadcasts real-time push alerts to security teams via the **Telegram Bot API**.
+It continuously models actor lifecycle states as a deterministic finite-state automaton, validates **34 formal mathematical security invariants**, runs **30+ deep secret analysis rules**, and synthesizes **16 compound ATO attack chains** with 1-click double-click Repeater dispatch and Telegram bot alerts.
 
 ---
 
@@ -35,31 +37,31 @@ It continuously models actor lifecycle states as a deterministic finite-state au
 
 | Feature | Description | Status |
 |---|---|---|
-| 🎯 **IDOR & BOLA Engine** | Auto-detects sequential/UUID IDs, maps cross-actor access matrices | ✅ Live |
-| 🛡️ **27 Security Invariants** | Deterministic state machine checks (OTP, session, JWT, IDOR, BFLA) | ✅ Live |
-| 🔬 **28 File & Secret Rules** | Scans for AWS, GCP, Azure, OpenAI, Anthropic, Firebase, Stripe, JWT keys | ✅ Live |
-| ⛓️ **12 Attack Chain Rules** | Correlates multi-step findings into complete ATO Kill Chains | ✅ Live |
-| 📱 **Telegram Bot Dispatcher** | Real-time mobile alerts with terminal-ready Kali cURL PoC commands | ✅ Live |
-| 🏦 **NimbusBank v2 Lab** | Full enterprise banking portal with 16 planted exploit vectors | ✅ Live |
-| ⚡ **Zero UI Latency** | Asynchronous multi-threaded worker pools | ✅ Live |
+| 🎯 **3-Way Differential IDOR Engine** | Triangulates Victim vs Attacker vs Anonymous with Soft-200 Error Filter | ✅ v3.0 Live |
+| 🛡️ **34 Security Invariants** | Deterministic state machine checks (OTP, session, JWT, IDOR, BFLA, Multi-Tenant) | ✅ v3.0 Live |
+| 🔬 **30+ File & Secret Rules** | Scans for AWS, GCP, Azure, OpenAI, Gemini, Firebase, Stripe, JWT keys | ✅ v3.0 Live |
+| ⛓️ **16 Attack Chain Rules** | Correlates multi-step findings into complete ATO Kill Chains | ✅ v3.0 Live |
+| ⚡ **14,880 Req/Sec Engine** | Microsecond evaluation latency with zero proxy drag | ✅ v3.0 Live |
+| 🎨 **Native FlatLaf Darcula UI** | Clean dark theme styling, no emoji box bugs, double-click to Repeater | ✅ v3.0 Live |
+| 📱 **Telegram Bot Dispatcher** | Real-time mobile alerts with terminal-ready Kali cURL PoC commands | ✅ v3.0 Live |
+| 🏦 **NimbusBank v2.1 Lab** | Full enterprise banking portal with 16 planted exploit vectors | ✅ v3.0 Live |
 
 ---
 
 ## 🌐 Live Demonstration Portal
 
-Explore the interactive security demonstration, 27 Invariants simulation, 28 secret rules engine, and full Montoya API architecture:
+Explore the interactive security demonstration, 34 Invariants simulation, 3-way differential IDOR engine, and 16 ATO attack chains:
 👉 **[Launch AUTHENTIX Enterprise Portal](https://pratik-khairnar-sec.github.io/authentix-enterprise/)**
-
----
 
 ---
 
 ## 👤 Author & Inquiries
 
-**Pratik Khairnar**
-- 📧 **Email**: [pratik.khairnar.sec@gmail.com](mailto:pratik.khairnar.sec@gmail.com)
+**Pratik Sanjay Khairnar**
+- 📧 **Email**: [pratikkhairnarsec@gmail.com](mailto:pratikkhairnarsec@gmail.com)
 - 🐙 **GitHub**: [@pratik-khairnar-sec](https://github.com/pratik-khairnar-sec)
-- 🛡️ VAPT Engineer • Penetration Tester • Security Tool Developer
+- 💼 **Portfolio**: [pratikkhairnarsec.web.app](https://pratikkhairnarsec.web.app/)
+- 🛡️ Lead Security Researcher • CEH v13 | CCNA • VAPT Engineer & Tool Architect
 
 ---
 
