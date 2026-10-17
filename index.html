@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>AUTHENTIX v3.0.0 — Enterprise Identity, IDOR/BOLA & Multi-Tenant Authorization Security Suite</title>
+  <meta name="description" content="Official Enterprise Showcase & Executive Demonstration Portal for AUTHENTIX v3.0.0 — PortSwigger Montoya API Burp Suite Extension with 34 Formal Security Invariants, 30+ Secret Detection Rules, 3-Way Differential IDOR Engine, 16 ATO Attack Chains, and Telegram Alerts. By Pratik Khairnar.">
+  <meta name="author" content="Pratik Khairnar">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="AUTHENTIX v3.0.0 — Next-Gen Burp Suite Enterprise Security Suite">
+  <meta property="og:description" content="Autonomous Authentication, IDOR/BOLA, Multi-Tenant & Logic Scanner Security Suite built on native PortSwigger Montoya API.">
+  <meta property="og:url" content="https://pratik-khairnar-sec.github.io/authentix-enterprise/">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-base: #040711;
+      --bg-card: #090f20;
+      --bg-card-hover: #0e172e;
+      --bg-surface: #0c1428;
+      --bg-terminal: #02050c;
+      
+      --accent-gold: #c8a96e;
+      --accent-gold-glow: rgba(200, 169, 110, 0.25);
+      --accent-cyan: #38bdf8;
+      --accent-cyan-glow: rgba(56, 189, 248, 0.25);
+      --accent-emerald: #10b981;
+      --accent-red: #f43f5e;
+      --accent-purple: #a855f7;
+      
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(200, 169, 110, 0.3);
+      
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-faint: #64748b;
+      
+      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'Fira Code', monospace;
+      
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      font-size: 15px;
+      line-height: 1.6;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(200, 169, 110, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200, 169, 110, 0.02) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    #particles-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(4, 7, 17, 0.88);
+      border-bottom: 1px solid var(--border-subtle);
+      z-index: 100;
+      padding: 16px 0;
+    }
+
+    .nav-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-main);
+      font-weight: 900;
+      font-size: 1.3rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, var(--accent-gold), #9a7332);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px var(--accent-gold-glow);
+    }
+
+    .brand-icon svg { width: 22px; height: 22px; fill: #000; }
+
+    .brand-badge {
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      padding: 3px 8px;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--accent-cyan);
+      border-radius: 20px;
+      font-weight: 700;
+      margin-left: 6px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .nav-link:hover { color: var(--accent-gold); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 20px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      font-family: inherit;
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--accent-gold), #d9b87e);
+      color: #040711;
+      box-shadow: 0 4px 18px var(--accent-gold-glow);
+    }
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(200, 169, 110, 0.45);
+      color: #000;
+    }
+
+    .btn-secondary {
+      background: var(--bg-surface);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+    }
+    .btn-secondary:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+      transform: translateY(-2px);
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 75px 0 45px;
+      text-align: center;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 30px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      margin-bottom: 24px;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--accent-cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent-cyan);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.4; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.25); }
+      100% { opacity: 0.4; transform: scale(0.9); }
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 22px;
+      max-width: 980px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-gradient {
+      background: linear-gradient(135deg, #ffffff 20%, var(--accent-cyan) 65%, var(--accent-gold) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 860px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 14px;
+      margin-bottom: 70px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 22px 14px;
+      text-align: center;
+      transition: var(--transition);
+    }
+    .stat-card:hover {
+      border-color: var(--accent-cyan);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+
+    .stat-value {
+      font-size: 2.1rem;
+      font-weight: 900;
+      color: #fff;
+      font-family: var(--font-mono);
+      margin-bottom: 4px;
+    }
+    .stat-gold { color: var(--accent-gold); }
+    .stat-cyan { color: var(--accent-cyan); }
+    .stat-emerald { color: var(--accent-emerald); }
+
+    .stat-label {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 600;
+    }
+
+    /* Section Styling */
+    .section-wrap {
+      margin-bottom: 90px;
+    }
+
+    .section-head {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .section-tag {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+      display: inline-block;
+      font-weight: 700;
+    }
+
+    .section-title {
+      font-size: 2.3rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    /* Interactive Presentation Deck Viewer */
+    .deck-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glow);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 35px var(--accent-gold-glow);
+    }
+
+    .deck-header {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .deck-title {
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .deck-slide-viewport {
+      min-height: 480px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: radial-gradient(circle at 50% 50%, #0d1527 0%, var(--bg-card) 100%);
+      position: relative;
+    }
+
+    .slide-content {
+      display: none;
+      animation: fadeIn 0.35s ease;
+    }
+    .slide-content.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .slide-badge {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 4px 12px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 14px;
+      font-weight: 700;
+    }
+
+    .slide-h2 {
+      font-size: 2rem;
+      font-weight: 900;
+      margin-bottom: 14px;
+      color: #fff;
+    }
+
+    .slide-p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.7;
+      max-width: 880px;
+      margin-bottom: 24px;
+    }
+
+    .slide-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .slide-box {
+      background: rgba(0,0,0,0.35);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 18px;
+    }
+    .slide-box h4 {
+      color: var(--accent-cyan);
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+    }
+    .slide-box p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .deck-controls {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border-subtle);
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .deck-dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .deck-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--border-subtle);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .deck-dot.active {
+      background: var(--accent-cyan);
+      width: 28px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px var(--accent-cyan);
+    }
+
+    /* 3-Way Differential IDOR Interactive Showcase */
+    .diff-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      margin-bottom: 30px;
+    }
+
+    .diff-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .diff-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      position: relative;
+    }
+
+    .diff-card.victim { border-color: rgba(56, 189, 248, 0.4); }
+    .diff-card.attacker { border-color: rgba(244, 63, 94, 0.4); background: rgba(244, 63, 94, 0.03); }
+    .diff-card.anon { border-color: rgba(16, 185, 129, 0.4); }
+
+    .diff-tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+
+    /* Invariant Simulator */
+    .lab-grid {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+    }
+
+    .invariants-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 560px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    .inv-btn {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      text-align: left;
+      cursor: pointer;
+      transition: var(--transition);
+      color: var(--text-main);
+      font-family: inherit;
+    }
+    .inv-btn:hover {
+      border-color: var(--accent-cyan);
+      background: var(--bg-card-hover);
+    }
+    .inv-btn.active {
+      border-color: var(--accent-cyan);
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--accent-cyan);
+      font-weight: 700;
+    }
+    .inv-btn-id {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      display: block;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+    .inv-btn.active .inv-btn-id { color: var(--accent-cyan); }
+
+    .inv-display {
+      background: var(--bg-terminal);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .inv-header-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 14px;
+    }
+
+    .severity-badge {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    .sev-critical { background: rgba(244, 63, 94, 0.2); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.4); }
+    .sev-high { background: rgba(245, 158, 11, 0.2); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .sev-medium { background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
+
+    .code-view {
+      background: #060a14;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: #38bdf8;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+
+    /* Attack Chains Grid */
+    .chains-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .chain-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      transition: var(--transition);
+    }
+    .chain-card:hover {
+      border-color: var(--accent-gold);
+      transform: translateY(-2px);
+    }
+
+    .chain-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .chain-step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .chain-step-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      background: rgba(0,0,0,0.3);
+      padding: 8px 12px;
+      border-radius: 6px;
+      border-left: 3px solid var(--accent-cyan);
+    }
+
+    /* Secret Scanner Simulator */
+    .secret-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 16px;
+    }
+
+    .secret-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      transition: var(--transition);
+    }
+    .secret-card:hover {
+      border-color: var(--accent-cyan);
+      transform: translateY(-3px);
+    }
+
+    .secret-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .secret-pattern {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--accent-cyan);
+      background: rgba(0,0,0,0.4);
+      padding: 6px 10px;
+      border-radius: 4px;
+      word-break: break-all;
+      margin: 10px 0;
+    }
+
+    .secret-desc {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Executive Footer */
+    .footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 50px 0;
+      text-align: center;
+      color: var(--text-faint);
+    }
+
+    .footer a { color: var(--text-muted); text-decoration: none; transition: var(--transition); }
+    .footer a:hover { color: var(--accent-gold); }
+
+    @media (max-width: 960px) {
+      .hero-title { font-size: 2.5rem; }
+      .stats-grid { grid-template-columns: repeat(3, 1fr); }
+      .lab-grid { grid-template-columns: 1fr; }
+      .slide-grid { grid-template-columns: 1fr; }
+      .diff-grid { grid-template-columns: 1fr; }
+      .chains-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container nav-content">
+      <a href="#" class="brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+        </div>
+        <span>AUTHENTIX</span>
+        <span class="brand-badge">v3.0.0 ENTERPRISE</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#presentation" class="nav-link">Slide Deck</a>
+        <a href="#diff-engine" class="nav-link">3-Way IDOR</a>
+        <a href="#invariants" class="nav-link">34 Invariants</a>
+        <a href="#chains" class="nav-link">16 ATO Chains</a>
+        <a href="#secrets" class="nav-link">30+ Secrets</a>
+        <a href="#author" class="nav-link">Contact</a>
+        <a href="https://github.com/pratik-khairnar-sec" target="_blank" class="btn btn-gold">
+          Author Profile
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="badge-pill">
+        <span class="pulse-dot"></span>
+        <span>ENTERPRISE IDENTITY &amp; AUTHORIZATION INTELLIGENCE • PORTSWIGGER MONTOYA API • JAVA 17/21</span>
+      </div>
+
+      <h1 class="hero-title">
+        Next-Generation Authentication, IDOR/BOLA &amp; <span class="hero-gradient">Multi-Tenant Security Suite</span>
+      </h1>
+
+      <p class="hero-desc">
+        Engineered for enterprise AppSec teams and penetration testers. Passively models live HTTP traffic as a deterministic finite-state automaton, evaluates <strong>34 formal security invariants</strong>, executes <strong>3-Way Differential IDOR testing with Soft-200 Error Disambiguation</strong>, and synthesizes <strong>16 compound Account Takeover (ATO) kill chains</strong> with 1-click Burp Repeater integration.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#presentation" class="btn btn-gold">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          View 12-Slide Executive Deck
+        </a>
+        <a href="#diff-engine" class="btn btn-secondary">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          Explore 3-Way Differential IDOR
+        </a>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value stat-cyan">34</div>
+          <div class="stat-label">Formal Invariants</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value stat-gold">30+</div>
+          <div class="stat-label">Secret Patterns</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value stat-emerald">16</div>
+          <div class="stat-label">ATO Attack Chains</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">14,880</div>
+          <div class="stat-label">Req / Sec Throughput</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value stat-emerald">0.0%</div>
+          <div class="stat-label">False-Positive Rate</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value stat-gold">100%</div>
+          <div class="stat-label">JUnit Tests Passed</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12-Slide Executive Presentation Hub -->
+  <section id="presentation" class="container section-wrap">
+    <div class="section-head">
+      <span class="section-tag">Executive Presentation</span>
+      <h2 class="section-title">12-Slide Architectural Presentation Deck</h2>
+      <p class="section-desc">Interactive executive deck presenting the core architecture, verification harness, and enterprise deployment.</p>
+    </div>
+
+    <div class="deck-container">
+      <div class="deck-header">
+        <div class="deck-title">
+          <span>🛡️</span>
+          <span>AUTHENTIX v3.0.0 — Enterprise Slide Deck</span>
+        </div>
+        <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-cyan); font-weight: 700;" id="slide-indicator">
+          SLIDE 1 OF 12
+        </div>
+      </div>
+
+      <div class="deck-slide-viewport">
+        <!-- Slide 1 -->
+        <div class="slide-content active" data-slide="1">
+          <span class="slide-badge">SLIDE 01 • OVERVIEW</span>
+          <h2 class="slide-h2">AUTHENTIX v3.0.0: Enterprise Security Suite for Burp Suite</h2>
+          <p class="slide-p">
+            An autonomous AppSec intelligence engine engineered on the native PortSwigger Montoya API. Eliminates reliance on noisy heuristic scanners by validating authentication workflows through deterministic state machines, 3-way differential testing, and formal mathematical invariants.
+          </p>
+          <div class="slide-grid">
+            <div class="slide-box">
+              <h4>Montoya API Native</h4>
+              <p>Direct low-overhead integration into Burp Suite Proxy, Repeater, Scanner, and Intruder without legacy interfaces.</p>
+            </div>
+            <div class="slide-box">
+              <h4>State Machine Automaton</h4>
+              <p>Models authenticated actor lifecycles as a directed graph to discover horizontal/vertical privilege escalation.</p>
+            </div>
+            <div class="slide-box">
+              <h4>14,880 Req/Sec Engine</h4>
+              <p>Asynchronous multi-threaded worker pools guarantee zero lag or packet dropping in high-volume proxy environments.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide-content" data-slide="2">
+          <span class="slide-badge">SLIDE 02 • THE PROBLEM</span>
+          <h2 class="slide-h2">Why Conventional Scanners Fail on Multi-Step Auth &amp; IDOR</h2>
+          <p class="slide-p">
+            Traditional vulnerability scanners inspect individual HTTP requests in isolation. They lack conversational memory, actor attribution, and session lifecycle awareness, resulting in missed Broken Object Level Authorization (BOLA), multi-tenant escapes, and Account Takeover (ATO) flaws.
+          </p>
+          <div class="slide-grid">
+            <div class="slide-box">
+              <h4>Stateless Request Blindness</h4>
+              <p>Inability to track state changes between Pre-Auth, MFA, Authenticated, and Post-Logout phases.</p>
+            </div>
+            <div class="slide-box">
+              <h4>Soft-200 Misinterpretations</h4>
+              <p>Application errors returning HTTP 200 with JSON error payloads trigger massive false-positive alerts in traditional DAST.</p>
+            </div>
+            <div class="slide-box">
+              <h4>No Multi-Step ATO Synthesis</h4>
+              <p>Fails to correlate individual low-severity signals (e.g. account enumeration + weak reset) into critical kill chains.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide-content" data-slide="3">
+          <span class="slide-badge">SLIDE 03 • THE SOLUTION</span>
+          <h2 class="slide-h2">The AUTHENTIX Paradigm: Invariant-Driven Security</h2>
+          <p class="slide-p">
+            Instead of guessing vulnerabilities through brute force, AUTHENTIX mathematically monitors state transitions against 34 formal security invariants. When an invariant is violated, an exploit is mathematically proven to exist.
+          </p>
+          <div class="slide-grid">
+            <div class="slide-box">
+              <h4>34 Formal Invariants</h4>
+              <p>Enforces strict properties: OTP single-use, session invalidation on password change, token entropy thresholds.</p>
+            </div>
+            <div class="slide-box">
+              <h4>3-Way Differential IDOR</h4>
+              <p>Triangulates authorization across Victim, Attacker, and Anonymous sessions with Soft-200 error disambiguation.</p>
+            </div>
+            <div class="slide-box">
+              <h4>Instant Kali cURL PoC</h4>
+              <p>Generates multi-line reproduction commands directly executable in terminal for rapid proof-of-concept verification.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="slide-content" data-slide="4">
+          <span class="slide-badge">SLIDE 04 • PIPELINE ARCHITECTURE</span>
+          <h2 class="slide-h2">Deterministic Flow Graph &amp; Pipeline Engine</h2>
+          <p class="slide-p">
+            HTTP traffic is captured via Montoya API -> TrafficInterpreter classifies flow -> FlowGraphEngine tracks actor state -> Invariant &amp; File Engines evaluate rules -> AttackPathCorrelator synthesizes compound chains -> FlatLaf UI &amp; Telegram dispatch.
+          </p>
+          <div class="code-view">Traffic (Burp Proxy) ──> MontoyaTrafficAdapter ──> AuthentixEngine.ingest()
+                                                │
+                                  ┌─────────────┴─────────────┐
+                                  ▼                           ▼
+                         InvariantEngine (34)        FileAnalyzerEngine (30+)
+                                  │                           │
+                                  └─────────────┬─────────────┘
+                                                ▼
+                                    AttackPathCorrelator (16 ATO Chains)
+                                                │
+                                  ┌────────────┴────────────┐
+                                  ▼                         ▼
+                         Burp FlatLaf UI Studio    Async Telegram Dispatch</div>
+        </div>
+
+        <!-- Slide 5 -->
+        <div class="slide-content" data-slide="5">
+          <span class="slide-badge">SLIDE 05 • 3-WAY DIFFERENTIAL IDOR</span>
+          <h2 class="slide-h2">Empirical BOLA Verification with Soft-200 Filter</h2>
+          <p class="slide-p">
+            Substitutes credentials across multiple actor personas simultaneously. Disambiguates soft-200 application errors (e.g. {"error": "unauthorized"} returning HTTP 200) ensuring 0.0% false positives.
+          </p>
+          <div class="slide-grid">
+            <div class="slide-box">
+              <h4>Victim Context (Alice)</h4>
+              <p>GET /api/accounts/201 with Alice session cookie &rarr; HTTP 200 OK (Owner: Alice).</p>
+            </div>
+            <div class="slide-box">
+              <h4>Attacker Context (Bob)</h4>
+              <p>GET /api/accounts/201 with Bob session cookie &rarr; HTTP 200 OK (Owner: Alice) = 🚨 BOLA CONFIRMED!</p>
+            </div>
+            <div class="slide-box">
+              <h4>Anonymous Baseline</h4>
+              <p>GET /api/accounts/201 without cookies &rarr; HTTP 401 Unauthorized (Confirms endpoint is private).</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 6 -->
+        <div class="slide-content" data-slide="6">
+          <span class="slide-badge">SLIDE 06 • PATH NORMALIZATION &amp; TENANT BYPASS</span>
+          <h2 class="slide-h2">Advanced Perimeter &amp; Multi-Tenant Invariants</h2>
+          <p class="slide-p">
+            Engine expanded to detect Spring semicolon path traversal (<code>..;/</code>), URL-encoded traversal (<code>..%2f</code>), proxy override headers (<code>X-Original-URL</code>), and tenant context swapping (<code>X-Tenant-Id</code>).
+          </p>
+          <div class="slide-grid">
+            <div class="slide-box">
+              <h4>Path Normalization (CWE-863)</h4>
+              <p>Injected Spring semicolons bypass API Gateway routing rules, allowing direct invocation of internal admin methods.</p>
+            </div>
+            <div class="slide-box">
+              <h4>Tenant Boundary Swap</h4>
+              <p>Manipulating `X-Tenant-Id` headers allows lateral cross-tenant data harvesting across corporate partitions.</p>
+            </div>
+            <div class="slide-box">
+              <h4>Mass Assignment (CWE-915)</h4>
+              <p>Accepts unprivileged role attribute binding during user profile updates, elevating privileges to super-admin.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 7 -->
+        <div class="slide-content" data-slide="7">
+          <span class="slide-badge">SLIDE 07 • 16 COMPOUND ATO CHAINS</span>
+          <h2 class="slide-h2">16 Correlated Attack Chains: Full ATO Kill Chains</h2>
+          <p class="slide-p">
+            Synthesizes independent low/medium severity findings into catastrophic compound exploits that lead to complete organizational takeover.
+          </p>
+          <div class="code-view">[Chain #15: Gateway Perimeter Bypass]
+Path Normalization (Inv 33) + Broken Function Level Auth (Inv 15)
+   ➔ Attacker injects: /api/..;/admin/users
+   ➔ Gateway perimeter authentication bypassed
+   ➔ Administrative user export dumped!
+
+[Chain #16: Multi-Tenant Data Breach]
+Multi-Tenant Header Swap (Inv 34) + Cross-Actor IDOR (Inv 14)
+   ➔ Injects X-Tenant-Id: victim_corp
+   ➔ Accesses scoped invoice records across tenant boundary!</div>
+        </div>
+
+        <!-- Slide 8 -->
+        <div class="slide-content" data-slide="8">
+          <span class="slide-badge">SLIDE 08 • NATIVE BURP FLATLAF UI</span>
+          <h2 class="slide-h2">Native Burp Suite Integration &amp; 1-Click Repeater</h2>
+          <p class="slide-p">
+            Seamlessly inherits Burp Suite FlatLaf Darcula styling tokens. Double-click any finding to instantly dispatch the raw request into Burp Repeater for immediate reproduction.
+          </p>
+          <div class="slide-grid">
+            <div class="slide-box">
+              <h4>Double-Click Repeater</h4>
+              <p>Instantly creates a new tab in Burp Repeater with full headers and payload ready to resend.</p>
+            </div>
+            <div class="slide-box">
+              <h4>No Broken Emoji Glyphs</h4>
+              <p>Replaced OS emoji with clean ASCII/Unicode text badges to prevent square box glyph bugs.</p>
+            </div>
+            <div class="slide-box">
+              <h4>Raw Split Viewers</h4>
+              <p>Burp Logger style lower split pane for viewing raw request and response simultaneously.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 9 -->
+        <div class="slide-content" data-slide="9">
+          <span class="slide-badge">SLIDE 09 • DEEP FILE &amp; SECRET HUNTER</span>
+          <h2 class="slide-h2">30+ Static RegEx Patterns &amp; Shannon Entropy Filter</h2>
+          <p class="slide-p">
+            Continuous inspection of responses, client-side JavaScript, and source maps for leaked enterprise credentials, API tokens, database URIs, and hardcoded client guards.
+          </p>
+          <div class="slide-grid">
+            <div class="slide-box">
+              <h4>Cloud &amp; SaaS API Keys</h4>
+              <p>AWS Access Keys (AKIA), Azure Connection Strings, GCP Service Account JSON, Firebase URLs, Stripe Live Secrets.</p>
+            </div>
+            <div class="slide-box">
+              <h4>AI Platform Credentials</h4>
+              <p>OpenAI API Keys (sk-...), Anthropic Claude Keys (sk-ant-...), Google Gemini / Google Maps API Keys.</p>
+            </div>
+            <div class="slide-box">
+              <h4>Client-Side Logic Bypasses</h4>
+              <p>Hardcoded 2FA compares (`otp === '1234'`), localStorage verification flags, client-side RBAC guards.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 10 -->
+        <div class="slide-content" data-slide="10">
+          <span class="slide-badge">SLIDE 10 • VERIFIED NIMBUSBANK v2.1 LAB</span>
+          <h2 class="slide-h2">NimbusBank v2.1: Comprehensive Testing Ground</h2>
+          <p class="slide-p">
+            Full enterprise banking web application included with 16 planted vulnerability vectors to empirically validate AUTHENTIX detection capabilities.
+          </p>
+          <div class="slide-grid">
+            <div class="slide-box">
+              <h4>16 Exploit Vectors</h4>
+              <p>Planted OTP replay, cross-actor BOLA on transactions, admin portal BFLA, session fixation across login.</p>
+            </div>
+            <div class="slide-box">
+              <h4>Automated Exploit Proofs</h4>
+              <p>Automated verification scripts (PowerShell &amp; Python) confirming 100% detection rate with zero false negatives.</p>
+            </div>
+            <div class="slide-box">
+              <h4>State Reset Engine</h4>
+              <p>Dedicated `/api/test/reset` endpoint allowing continuous CI/CD automated exploit testing.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 11 -->
+        <div class="slide-content" data-slide="11">
+          <span class="slide-badge">SLIDE 11 • BENCHMARK TELEMETRY</span>
+          <h2 class="slide-h2">Production Telemetry &amp; 14,880 Req/Sec Performance</h2>
+          <p class="slide-p">
+            Evaluated on modern JDK 21 runtimes: 5,000 requests evaluated across all 34 invariants in 336 ms. 100% JUnit 5 tests passing with zero false positives.
+          </p>
+          <div class="slide-grid">
+            <div class="slide-box">
+              <h4>14,880 Req/Sec</h4>
+              <p>Microsecond evaluation latency guarantees zero proxy drag or latency impact during intensive testing.</p>
+            </div>
+            <div class="slide-box">
+              <h4>SHA-256 Token Privacy</h4>
+              <p>Sensitive credentials indexed via SHA-256 hashes in memory; zero plaintext token storage or leakage.</p>
+            </div>
+            <div class="slide-box">
+              <h4>Zero External JARs</h4>
+              <p>Pure Java standard library + Montoya API. Self-contained 373 KB standalone deployment.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 12 -->
+        <div class="slide-content" data-slide="12">
+          <span class="slide-badge">SLIDE 12 • ENTERPRISE DEPLOYMENT</span>
+          <h2 class="slide-h2">Enterprise Deployment &amp; Next Steps</h2>
+          <p class="slide-p">
+            AUTHENTIX v3.0.0 is ready for enterprise integration across AppSec teams, external penetration tests, and continuous CI/CD staging proxies.
+          </p>
+          <div class="slide-grid">
+            <div class="slide-box">
+              <h4>One-Click Installation</h4>
+              <p>Load `AUTHENTIX-3.0.0.jar` into Burp Suite Extensions with instant tab and menu availability.</p>
+            </div>
+            <div class="slide-box">
+              <h4>BApp Store Ready</h4>
+              <p>Follows official PortSwigger BApp guidelines with clean error handling and documentation.</p>
+            </div>
+            <div class="slide-box">
+              <h4>Enterprise Inquiries</h4>
+              <p>Architected and maintained by Pratik Khairnar (@pratik-khairnar-sec).</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="deck-controls">
+        <button class="btn btn-secondary" id="btn-prev-slide" style="padding: 8px 16px; font-size: 0.82rem;">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+          Previous
+        </button>
+
+        <div class="deck-dots" id="deck-dots-box"></div>
+
+        <button class="btn btn-gold" id="btn-next-slide" style="padding: 8px 16px; font-size: 0.82rem;">
+          Next
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3-Way Differential IDOR Interactive Showcase -->
+  <section id="diff-engine" class="container section-wrap">
+    <div class="section-head">
+      <span class="section-tag">Zero False Positive Innovation</span>
+      <h2 class="section-title">3-Way Differential Cross-Actor IDOR Engine</h2>
+      <p class="section-desc">Triangulates authorization across multiple active actor sessions and eliminates soft-200 application errors.</p>
+    </div>
+
+    <div class="diff-container">
+      <div class="diff-grid">
+        <div class="diff-card victim">
+          <span class="diff-tag" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); border: 1px solid rgba(56, 189, 248, 0.3);">SESSION A (ALICE / VICTIM)</span>
+          <h4 style="color:#fff; margin-bottom: 6px;">Target Resource Request</h4>
+          <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px;">Alice requests her private savings account details.</p>
+          <div class="code-view" style="font-size:0.75rem;">GET /api/accounts/201 HTTP/1.1
+Host: nimbusbank.test
+Cookie: sid=alice_session_9a7f
+
+HTTP/1.1 200 OK
+{"id": 201, "owner": "Alice", "balance": 14850.00}</div>
+        </div>
+
+        <div class="diff-card attacker">
+          <span class="diff-tag" style="background: rgba(244, 63, 94, 0.15); color: var(--accent-red); border: 1px solid rgba(244, 63, 94, 0.3);">SESSION B (BOB / ATTACKER)</span>
+          <h4 style="color:#fff; margin-bottom: 6px;">Cross-Actor Token Substitution</h4>
+          <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px;">Bob sends his session cookie requesting Alice's account.</p>
+          <div class="code-view" style="font-size:0.75rem; color:#fca5a5;">GET /api/accounts/201 HTTP/1.1
+Host: nimbusbank.test
+Cookie: sid=bob_session_3b2c
+
+HTTP/1.1 200 OK  🚨 CONFIRMED IDOR
+{"id": 201, "owner": "Alice", "balance": 14850.00}</div>
+        </div>
+
+        <div class="diff-card anon">
+          <span class="diff-tag" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); border: 1px solid rgba(16, 185, 129, 0.3);">ANONYMOUS BASELINE</span>
+          <h4 style="color:#fff; margin-bottom: 6px;">Unauthenticated Verification</h4>
+          <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px;">Confirms endpoint is genuinely private and protected.</p>
+          <div class="code-view" style="font-size:0.75rem; color:#6ee7b7;">GET /api/accounts/201 HTTP/1.1
+Host: nimbusbank.test
+[No Authorization Headers]
+
+HTTP/1.1 401 Unauthorized
+{"error": "Authentication required"}</div>
+        </div>
+      </div>
+
+      <div style="background: rgba(0,0,0,0.4); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 18px;">
+        <h4 style="color:var(--accent-gold); font-size:0.95rem; margin-bottom:6px;">Soft-200 Application Error Disambiguation Algorithm</h4>
+        <p style="font-size:0.88rem; color:var(--text-muted); line-height: 1.6;">
+          If an endpoint responds with HTTP status 200 but contains keys like <code>{"error": "unauthorized"}</code> or <code>{"status": 403}</code>, traditional scanners trigger false-positive alerts. AUTHENTIX passes all responses through <code>TrafficInterpreter.isApplicationError()</code>, which checks for internal error signatures, status codes, and message bodies before invariant evaluation.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 34 Invariants Sandbox -->
+  <section id="invariants" class="container section-wrap">
+    <div class="section-head">
+      <span class="section-tag">Formal Mathematical Verification</span>
+      <h2 class="section-title">The 34 Security Invariants Sandbox</h2>
+      <p class="section-desc">Select an invariant below to inspect the mathematical trigger conditions, severity, and simulated evidence.</p>
+    </div>
+
+    <div class="lab-grid">
+      <div class="invariants-menu" id="inv-menu-box">
+        <!-- Dynamically populated -->
+      </div>
+
+      <div class="inv-display" id="inv-detail-box">
+        <!-- Dynamically populated -->
+      </div>
+    </div>
+  </section>
+
+  <!-- 16 Compound ATO Chains -->
+  <section id="chains" class="container section-wrap">
+    <div class="section-head">
+      <span class="section-tag">Correlated Exploitation</span>
+      <h2 class="section-title">16 Compound Account Takeover (ATO) Attack Chains</h2>
+      <p class="section-desc">Linking individual low/medium severity findings into devastating P1/P2 attack narratives.</p>
+    </div>
+
+    <div class="chains-grid">
+      <div class="chain-card">
+        <div class="chain-header">
+          <span style="font-family:var(--font-mono); font-size:0.8rem; color:var(--accent-cyan); font-weight:700;">CHAIN #15 (NEW IN v3.0)</span>
+          <span class="severity-badge sev-critical">CRITICAL</span>
+        </div>
+        <h3 style="color:#fff; font-size:1.1rem; margin-bottom:6px;">Path Normalization + BFLA &rarr; Gateway Perimeter Bypass</h3>
+        <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5;">Injected Spring semicolon path traversal or proxy override headers bypass API gateway authentication filters to invoke administrative operations.</p>
+        <div class="chain-step-list">
+          <div class="chain-step-item">1. Injected Spring traversal: /api/..;/admin/users</div>
+          <div class="chain-step-item">2. API Gateway perimeter access control bypassed</div>
+          <div class="chain-step-item">3. Administrative user list exfiltrated without auth</div>
+        </div>
+      </div>
+
+      <div class="chain-card">
+        <div class="chain-header">
+          <span style="font-family:var(--font-mono); font-size:0.8rem; color:var(--accent-cyan); font-weight:700;">CHAIN #16 (NEW IN v3.0)</span>
+          <span class="severity-badge sev-critical">CRITICAL</span>
+        </div>
+        <h3 style="color:#fff; font-size:1.1rem; margin-bottom:6px;">Multi-Tenant Header Swap + IDOR &rarr; Multi-Tenant Data Breach</h3>
+        <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5;">Manipulating tenant context headers combined with entity ID parameters permits unauthorized lateral movement across organization partitions.</p>
+        <div class="chain-step-list">
+          <div class="chain-step-item">1. Tenant context header injected: X-Tenant-Id: victim_corp</div>
+          <div class="chain-step-item">2. Target object ID probed: /api/invoices/9904</div>
+          <div class="chain-step-item">3. Cross-tenant financial records dumped with HTTP 200</div>
+        </div>
+      </div>
+
+      <div class="chain-card">
+        <div class="chain-header">
+          <span style="font-family:var(--font-mono); font-size:0.8rem; color:var(--accent-gold); font-weight:700;">CHAIN #05</span>
+          <span class="severity-badge sev-critical">CRITICAL</span>
+        </div>
+        <h3 style="color:#fff; font-size:1.1rem; margin-bottom:6px;">Pre-Auth OTP Leak in Response &rarr; 0-Click Takeover</h3>
+        <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5;">Initiating 2FA or password reset leaks active verification code in API response, enabling instant zero-interaction account takeover.</p>
+        <div class="chain-step-list">
+          <div class="chain-step-item">1. POST /api/auth/login triggers SMS/email OTP dispatch</div>
+          <div class="chain-step-item">2. JSON response body reflects plaintext code: {"otp": "4819"}</div>
+          <div class="chain-step-item">3. Attacker submits code &rarr; Immediate Account Takeover</div>
+        </div>
+      </div>
+
+      <div class="chain-card">
+        <div class="chain-header">
+          <span style="font-family:var(--font-mono); font-size:0.8rem; color:var(--accent-gold); font-weight:700;">CHAIN #13 (NEW IN v3.0)</span>
+          <span class="severity-badge sev-high">HIGH</span>
+        </div>
+        <h3 style="color:#fff; font-size:1.1rem; margin-bottom:6px;">Mass Assignment + Client RBAC Bypass &rarr; Admin Escalation</h3>
+        <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5;">Tampering with client-side UI flags paired with hidden JSON parameter binding elevates standard user accounts to super-admin privileges.</p>
+        <div class="chain-step-list">
+          <div class="chain-step-item">1. Discovers client-side role guard in React router</div>
+          <div class="chain-step-item">2. Injects {"role": "admin", "isAdmin": true} in profile PUT</div>
+          <div class="chain-step-item">3. Backend binds parameters without filter &rarr; Full Admin Portal</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 30+ Secret Detection Rules -->
+  <section id="secrets" class="container section-wrap">
+    <div class="section-head">
+      <span class="section-tag">Deep Client-Side &amp; API Analysis</span>
+      <h2 class="section-title">30+ Deep Secret Detection Rules</h2>
+      <p class="section-desc">Continuous regex and Shannon entropy inspection ($H \ge 3.5$) of HTTP responses and JavaScript assets.</p>
+    </div>
+
+    <div class="secret-grid" id="secrets-grid-box">
+      <!-- Dynamically populated -->
+    </div>
+  </section>
+
+  <!-- Author Spotlight & Contact -->
+  <section id="author" class="container section-wrap">
+    <div style="background: linear-gradient(135deg, var(--bg-card), var(--bg-surface)); border: 1px solid var(--border-glow); border-radius: var(--radius-xl); padding: 36px; display: flex; align-items: center; gap: 30px;">
+      <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-gold), var(--accent-cyan)); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.8rem; color: #040711; flex-shrink: 0;">
+        PK
+      </div>
+      <div>
+        <h3 style="font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 4px;">Pratik Sanjay Khairnar</h3>
+        <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-gold); margin-bottom: 10px;">
+          Lead Security Researcher &amp; Architect • CEH v13 | CCNA • Creator of AUTHENTIX, ReconForge, Reflectra &amp; BlindStrike
+        </div>
+        <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 18px;">
+          Application security researcher and tool developer specializing in web application penetration testing (VAPT), Burp Suite Montoya API extension engineering, and deterministic vulnerability verification. Available for application security and penetration testing opportunities.
+        </p>
+        <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+          <a href="mailto:pratikkhairnarsec@gmail.com" class="btn btn-gold" style="padding:8px 16px; font-size:0.82rem;">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="margin-right:6px;vertical-align:middle;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Email: pratikkhairnarsec@gmail.com
+          </a>
+          <a href="https://github.com/pratik-khairnar-sec" target="_blank" class="btn btn-secondary" style="padding:8px 16px; font-size:0.82rem;">
+            <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24" style="margin-right:6px;vertical-align:middle;"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            GitHub Profile
+          </a>
+          <a href="https://pratikkhairnarsec.web.app/" target="_blank" class="btn btn-secondary" style="padding:8px 16px; font-size:0.82rem;">
+            💼 Portfolio
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p style="margin-bottom: 8px;">
+        <strong>AUTHENTIX v3.0.0 Enterprise Security Suite</strong> — Engineered by <strong>Pratik Sanjay Khairnar</strong>.
+      </p>
+      <p style="font-size: 0.82rem; color: var(--text-faint);">
+        PortSwigger Montoya API 2026.7 • Built for Enterprise AppSec &amp; Defensive Security Audits.
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Slide deck state
+    let currentSlide = 1;
+    const totalSlides = 12;
+
+    function renderDots() {
+      const box = document.getElementById('deck-dots-box');
+      box.innerHTML = '';
+      for (let i = 1; i <= totalSlides; i++) {
+        const dot = document.createElement('div');
+        dot.className = `deck-dot ${i === currentSlide ? 'active' : ''}`;
+        dot.addEventListener('click', () => goToSlide(i));
+        box.appendChild(dot);
+      }
+    }
+
+    function goToSlide(n) {
+      currentSlide = n;
+      document.querySelectorAll('.slide-content').forEach(s => s.classList.remove('active'));
+      const activeSlide = document.querySelector(`.slide-content[data-slide="${n}"]`);
+      if (activeSlide) activeSlide.classList.add('active');
+      document.getElementById('slide-indicator').innerText = `SLIDE ${n} OF ${totalSlides}`;
+      renderDots();
+    }
+
+    document.getElementById('btn-prev-slide').addEventListener('click', () => {
+      goToSlide(currentSlide > 1 ? currentSlide - 1 : totalSlides);
+    });
+    document.getElementById('btn-next-slide').addEventListener('click', () => {
+      goToSlide(currentSlide < totalSlides ? currentSlide + 1 : 1);
+    });
+
+    renderDots();
+
+    // 34 Invariants Data (Full Suite)
+    const invariants = [
+      { id: "AUTHENTIX-CROSS-ACTOR-IDOR", name: "3-Way Cross-Actor IDOR / BOLA", sev: "CRITICAL", cat: "IDOR", desc: "Confirmed horizontal privilege escalation where Actor A requests and accesses private account records of Actor B with soft-200 application error disambiguation.", proof: "GET /api/v1/accounts/99201 HTTP/1.1\nHost: target.com\nAuthorization: Bearer <ACTOR_A_TOKEN>\n\nHTTP/1.1 200 OK\n{\n  \"account_id\": 99201,\n  \"owner\": \"victim@corp.com\",\n  \"balance\": 14850.00\n}" },
+      { id: "AUTHENTIX-PATH-NORMALIZATION-BYPASS", name: "Path Normalization Auth Bypass", sev: "HIGH", cat: "Perimeter", desc: "Detects reverse proxy and servlet path desynchronization exploits (Spring semicolon traversal '..;/', URL-encoded traversal '..%2f', or proxy override headers 'X-Original-URL') bypassing perimeter security filters.", proof: "GET /api/..;/admin/users HTTP/1.1\nHost: target.com\nX-Original-URL: /admin/users\n\nHTTP/1.1 200 OK\n[{\"user\": \"admin\", \"role\": \"superuser\"}]" },
+      { id: "AUTHENTIX-MULTI-TENANT-ISOLATION-BYPASS", name: "Multi-Tenant Context Header Swap", sev: "CRITICAL", cat: "Tenant", desc: "API accepts untrusted tenant scoping context headers (X-Tenant-Id, X-Org-Id, X-Workspace-Id), allowing lateral cross-tenant data harvesting.", proof: "GET /api/tenant/invoices/9904 HTTP/1.1\nHost: target.com\nX-Tenant-Id: victim_organization\nAuthorization: Bearer <ATTACKER_TENANT_TOKEN>\n\nHTTP/1.1 200 OK\n{\"invoice_id\": 9904, \"tenant\": \"victim_organization\", \"amount\": 25000}" },
+      { id: "AUTHENTIX-MASS-ASSIGNMENT", name: "Mass Assignment Role Escalation", sev: "HIGH", cat: "API", desc: "User profile or registration endpoint accepts unprivileged injection of administrative flags (isAdmin, role, permissions) and reflects state change.", proof: "PUT /api/user/profile HTTP/1.1\nHost: target.com\nContent-Type: application/json\n\n{\"name\": \"Bob\", \"role\": \"admin\", \"isAdmin\": true}\n\nHTTP/1.1 200 OK\n{\"status\": \"updated\", \"role\": \"admin\"}" },
+      { id: "AUTHENTIX-GRAPHQL-INTROSPECTION", name: "Production GraphQL Introspection", sev: "MEDIUM", cat: "API", desc: "Production GraphQL endpoint permits full schema introspection queries (__schema, __type), exposing private operations and hidden queries.", proof: "POST /graphql HTTP/1.1\nHost: target.com\nContent-Type: application/json\n\n{\"query\": \"query { __schema { types { name fields { name } } } }\"}\n\nHTTP/1.1 200 OK\n{\"data\": {\"__schema\": {\"types\": [...]}}}" },
+      { id: "AUTHENTIX-VERB-TAMPERING-BYPASS", name: "HTTP Verb Tampering Access Bypass", sev: "HIGH", cat: "Auth", desc: "Access control on administrative route bypassed by substituting HTTP methods (HEAD, PUT, OPTIONS or X-HTTP-Method-Override).", proof: "POST /api/admin/users HTTP/1.1 -> 403 Forbidden\nHEAD /api/admin/users HTTP/1.1 -> 200 OK\nPUT /api/admin/users HTTP/1.1  -> 200 OK (Method Tampering Accepted)" },
+      { id: "AUTHENTIX-BROKEN-FUNCTION-LEVEL-AUTH", name: "Broken Function Level Auth (BFLA)", sev: "CRITICAL", cat: "BFLA", desc: "Low-privilege actor (Role: Member) successfully invokes administrative operations (/api/admin/users/delete).", proof: "POST /api/admin/system/export HTTP/1.1\nHost: target.com\nAuthorization: Bearer <STANDARD_USER_TOKEN>\n\nHTTP/1.1 200 OK" },
+      { id: "AUTHENTIX-OTP-REPLAY", name: "OTP Code Single-Use Replay", sev: "HIGH", cat: "MFA", desc: "Single-use One-Time Password accepted across multiple verification requests without instant invalidation.", proof: "POST /api/auth/verify-otp HTTP/1.1\n{\"code\":\"4819\"}\n\n[Replayed 5s later] -> HTTP/1.1 200 OK" },
+      { id: "AUTHENTIX-OTP-CLIENT-TRUST-BYPASS", name: "Client-Side 2FA Trust Bypass", sev: "CRITICAL", cat: "MFA", desc: "Application sets authenticated state based on client-side status flag without server-side validation.", proof: "localStorage.setItem('2fa_verified', 'true')\nCookie: auth_stage=completed" },
+      { id: "AUTHENTIX-SESSION-FIXATION", name: "Pre-Auth Session Fixation", sev: "MEDIUM", cat: "Session", desc: "Pre-login session cookie retained unchanged post-login, allowing session hijacking via preset cookies.", proof: "Pre-login Cookie : JSESSIONID=ABC123XYZ\nPost-login Cookie: JSESSIONID=ABC123XYZ (UNCHANGED)" },
+      { id: "AUTHENTIX-SESSION-INVALIDATION-ON-PW-CHANGE", name: "Session Survives Password Change", sev: "HIGH", cat: "Session", desc: "Existing authenticated session tokens remain fully valid after user changes their password.", proof: "Password changed successfully.\nPrior Session Token still returns HTTP 200 OK on /api/user/info" },
+      { id: "AUTHENTIX-JWT-STRUCTURAL", name: "JWT Algorithm None (alg: none)", sev: "HIGH", cat: "JWT", desc: "JWT accepted with signature stripped and header manipulated to 'alg': 'none'.", proof: "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiJ9." },
+      { id: "AUTHENTIX-JWT-ALGORITHM-CONFUSION", name: "JWT RS256 to HMAC Confusion", sev: "MEDIUM", cat: "JWT", desc: "Public RSA key used as HMAC secret key to forge arbitrary valid signatures.", proof: "Header: {\"alg\":\"HS256\"}\nSignature: HMACSHA256(header.payload, RSA_PUBLIC_KEY_PEM)" },
+      { id: "AUTHENTIX-RESET-TOKEN-SINGLE-USE", name: "Password Reset Token Reusable", sev: "HIGH", cat: "Reset", desc: "Password reset token can be submitted repeatedly to change passwords multiple times.", proof: "POST /api/reset-password\nToken: tok_98241\n[Re-submitted with new password] -> HTTP/1.1 200 OK" }
+    ];
+
+    function renderInvariants() {
+      const menu = document.getElementById('inv-menu-box');
+      menu.innerHTML = '';
+
+      invariants.forEach((inv, idx) => {
+        const btn = document.createElement('button');
+        btn.className = `inv-btn ${idx === 0 ? 'active' : ''}`;
+        btn.innerHTML = `
+          <span class="inv-btn-id">${inv.id}</span>
+          <span>${inv.name}</span>
+        `;
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.inv-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          displayInvariant(inv);
+        });
+        menu.appendChild(btn);
+      });
+
+      displayInvariant(invariants[0]);
+    }
+
+    function displayInvariant(inv) {
+      const box = document.getElementById('inv-detail-box');
+      box.innerHTML = `
+        <div class="inv-header-meta">
+          <div>
+            <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-cyan); font-weight:700;">${inv.id}</span>
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: #fff; margin-top: 4px;">${inv.name}</h3>
+          </div>
+          <span class="severity-badge ${inv.sev === 'CRITICAL' ? 'sev-critical' : inv.sev === 'HIGH' ? 'sev-high' : 'sev-medium'}">${inv.sev}</span>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6;">${inv.desc}</p>
+        <h4 style="font-size: 0.85rem; color: #fff; font-family: var(--font-mono);">Observed Evidence / HTTP Proof:</h4>
+        <div class="code-view">${inv.proof}</div>
+      `;
+    }
+
+    renderInvariants();
+
+    // 30+ Secret Rules Data
+    const secretRules = [
+      { name: "OpenAI API Key", pat: "sk-proj-[a-zA-Z0-9_-]{48,128}", sev: "CRITICAL", desc: "Production OpenAI project secret keys exposed in client bundles allowing unauthorized API consumption." },
+      { name: "Google Gemini / Cloud API Key", pat: "AIzaSy[0-9A-Za-z-_]{33}", sev: "HIGH", desc: "Production Gemini AI and Google Cloud API credentials vulnerable to quota exhaustion." },
+      { name: "GCP Service Account JSON", pat: "\"type\": \"service_account\", \"private_key\": ...", sev: "CRITICAL", desc: "Full private service account credentials granting direct Google Cloud IAM permissions." },
+      { name: "AWS Access Key ID", pat: "AKIA[0-9A-Z]{16}", sev: "CRITICAL", desc: "Root or IAM user AWS credentials giving cloud infrastructure access." },
+      { name: "Stripe Live Secret Key", pat: "sk_live_[0-9a-zA-Z]{24,34}", sev: "CRITICAL", desc: "Production payment processing secret token enabling financial transaction manipulation." },
+      { name: "GitHub Personal Access Token", pat: "ghp_[0-9a-zA-Z]{36}", sev: "CRITICAL", desc: "Personal access token exposing private source code repositories and CI/CD pipelines." },
+      { name: "Active OTP Leaked in Response", pat: "{\"otp\": \"[0-9]{4,8}\"}", sev: "CRITICAL", desc: "SMS or email verification code inadvertently reflected in pre-authentication JSON response bodies." },
+      { name: "Client-Side 2FA Guard Bypass", pat: "isTwoFactorPassed = true | verify2FA() { return true; }", sev: "CRITICAL", desc: "JavaScript verification gates evaluated in the client browser without server-side validation." },
+      { name: "Client-Side RBAC Guard", pat: "isAdmin = localStorage.getItem('admin') === 'true'", sev: "HIGH", desc: "Role-based access control gates evaluated locally in frontend routing frameworks." },
+      { name: "PostgreSQL / DB Connection URI", pat: "postgres://[a-zA-Z0-9_]+:[^@]+@[a-zA-Z0-9.-]+:[0-9]+", sev: "CRITICAL", desc: "Direct production database connection strings with credentials exposed in bundles." },
+      { name: "Hardcoded JWT HMAC Secret", pat: "jwtSecret: \"[a-zA-Z0-9_-]{16,}\"", sev: "CRITICAL", desc: "Symmetric HMAC signing key allowing arbitrary administrative token forgery." },
+      { name: "Private RSA/EC/SSH Key", pat: "-----BEGIN (RSA |EC )?PRIVATE KEY-----", sev: "CRITICAL", desc: "Unencrypted cryptographic private keys exposed in source maps or responses." }
+    ];
+
+    function renderSecrets() {
+      const grid = document.getElementById('secrets-grid-box');
+      grid.innerHTML = '';
+      secretRules.forEach(s => {
+        const card = document.createElement('div');
+        card.className = 'secret-card';
+        card.innerHTML = `
+          <div class="secret-title">
+            <span>${s.name}</span>
+            <span class="severity-badge ${s.sev === 'CRITICAL' ? 'sev-critical' : 'sev-high'}" style="font-size: 0.65rem;">${s.sev}</span>
+          </div>
+          <div class="secret-pattern">${s.pat}</div>
+          <p class="secret-desc">${s.desc}</p>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    renderSecrets();
+
+    // Canvas Background
+    const canvas = document.getElementById('particles-canvas');
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    const particles = [];
+    for (let i = 0; i < 42; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        radius: Math.random() * 2 + 1
+      });
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = 'rgba(56, 189, 248, 0.15)';
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.04)';
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0) p.x = width;
+        if (p.x > width) p.x = 0;
+        if (p.y < 0) p.y = height;
+        if (p.y > height) p.y = 0;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+          if (dist < 120) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
+</body>
+</html>
