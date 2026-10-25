@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/banner.svg" width="100%" alt="AUTHENTIX Enterprise — Burp Suite Montoya Security Suite" />
+</p>
+
 # 🛡️ AUTHENTIX v3.0.0 Enterprise Demonstration Portal
 
 **Autonomous Authentication, IDOR/BOLA & Multi-Tenant Authorization Intelligence Engine for Burp Suite**
@@ -52,6 +56,14 @@ It continuously models actor lifecycle states as a deterministic finite-state au
 
 Explore the interactive security demonstration, 34 Invariants simulation, 3-way differential IDOR engine, and 16 ATO attack chains:
 👉 **[Launch AUTHENTIX Enterprise Portal](https://pratik-khairnar-sec.github.io/authentix-enterprise/)**
+
+<p align="center">
+  <img src="screenshots/13_presentation_idor_matrix.png" width="100%" alt="Horizontal Privilege Escalation & 3-Way Differential IDOR Engine" />
+</p>
+
+<p align="center">
+  <img src="screenshots/14_presentation_stats_verified.png" width="100%" alt="AUTHENTIX Empirical Verification — 100% Passing & Zero False Positives" />
+</p>
 
 ---
 
